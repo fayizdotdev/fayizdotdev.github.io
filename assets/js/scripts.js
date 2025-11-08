@@ -12,6 +12,22 @@ window.addEventListener("scroll", () => {
 const mobileMenuToggle = document.querySelector(".mobile-menu-toggle");
 const navLinks = document.querySelector(".nav-links");
 
+// GitHub account issue notification
+document.addEventListener("DOMContentLoaded", () => {
+  const githubLink = document.querySelector(
+    'a[href="https://github.com/fayisdotdev"]'
+  );
+  if (githubLink) {
+    githubLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      showNotification(
+        "I apologize, but my GitHub account is temporarily unavailable due to a flagging issue. I'm working to resolve this. Please check back later.",
+        "info"
+      );
+    });
+  }
+});
+
 if (mobileMenuToggle && navLinks) {
   mobileMenuToggle.addEventListener("click", (e) => {
     navLinks.classList.toggle("active");
@@ -251,6 +267,101 @@ if (window.AOS) {
     offset: 100,
   });
 }
+
+// Initial GitHub account notification
+window.addEventListener("DOMContentLoaded", () => {
+  // Create modal styles if they don't exist
+  if (!document.querySelector("#modal-styles")) {
+    const style = document.createElement("style");
+    style.id = "modal-styles";
+    style.textContent = `
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.85);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+      .modal-content {
+        background: var(--color-bg-card);
+        padding: 2rem;
+        border-radius: var(--radius-md);
+        max-width: 90%;
+        width: 400px;
+        transform: translateY(-20px);
+        transition: all 0.3s ease;
+        border: 1px solid var(--color-accent);
+      }
+      .modal-overlay.show {
+        opacity: 1;
+        visibility: visible;
+      }
+      .modal-overlay.show .modal-content {
+        transform: translateY(0);
+      }
+      .modal-title {
+        color: var(--color-accent);
+        margin-bottom: 1rem;
+        font-size: 1.25rem;
+        font-weight: 600;
+      }
+      .modal-text {
+        color: var(--color-text-primary);
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+      }
+      .modal-close {
+        background: var(--color-accent);
+        color: var(--color-bg-dark);
+        border: none;
+        padding: 0.5rem 1.5rem;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+      .modal-close:hover {
+        background: var(--color-accent-hover);
+        transform: translateY(-2px);
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  // Create and show modal
+  const modal = document.createElement("div");
+  modal.className = "modal-overlay";
+  modal.innerHTML = `
+    <div class="modal-content">
+      <h3 class="modal-title">⚠️ GitHub Account Notice</h3>
+      <p class="modal-text">I apologize for the inconvenience, but my GitHub account is currently flagged and temporarily unavailable. I'm actively working to resolve this issue. Thank you for your understanding.</p>
+      <button class="modal-close">Got it</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  // Show modal with slight delay for smooth transition
+  setTimeout(() => {
+    modal.classList.add("show");
+  }, 1000);
+
+  // Close modal on button click
+  const closeButton = modal.querySelector(".modal-close");
+  closeButton.addEventListener("click", () => {
+    modal.classList.remove("show");
+    setTimeout(() => {
+      modal.remove();
+    }, 300);
+  });
+});
 
 // Preloader
 window.addEventListener("load", () => {
